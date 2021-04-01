@@ -22,7 +22,7 @@ module.exports = {
         async register(
             _, 
            { 
-               registerInput: { username, email, password, confirmPassword}
+               registerInput: { username, email, password, confirmPassword }
            }, 
            ) {
                 //TODO: Validate user data
@@ -83,7 +83,6 @@ module.exports = {
                 throw new UserInputError('Wrong credentials', { errors });   
             }
 
-          
             const token = generateToken(user);
 
             return {
@@ -91,7 +90,6 @@ module.exports = {
                 id: user._id,
                 token
             };
-        
         }
     }
 }
