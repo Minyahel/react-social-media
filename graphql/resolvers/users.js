@@ -25,7 +25,6 @@ module.exports = {
                registerInput: { username, email, password, confirmPassword }
            }, 
            ) {
-                //TODO: Validate user data
 
                 const { valid, errors } = validateRegisterInput(username, email, password, confirmPassword);
                
@@ -42,7 +41,6 @@ module.exports = {
                     })
                 }
                 
-                //TODO: hash password and create an auth token
                 password = await bcrypt.hash(password, 12);
 
                 const newUser =  new User( {
