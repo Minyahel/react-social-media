@@ -28,7 +28,7 @@ function MenuBar() {
           name='logout'
           onClick={logout}
           as={Link}
-          to="register"
+          to="login"
         />
     </Menu.Menu>
   </Menu>
