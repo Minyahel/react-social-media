@@ -5,23 +5,26 @@ import { Grid, GridColumn, GridRow } from 'semantic-ui-react';
 import PostCard from '../components/PostCard';
 
 function Home() {
-    const { loading, data : {getPosts: posts} } = useQuery(FETCH_POSTS_QUERY);
+    const { loading, data } = useQuery(FETCH_POSTS_QUERY);    
 
-    return (    
+    const content = data ? (
         <Grid columns={3}>
             <Grid.Row className="page-title">
                 <h1>Recent Posts</h1>
             </Grid.Row>
             <GridRow>
-                { loading ? (<h1>Loading posts...</h1>) : ( posts && posts.map(post => (
+                { loading ? (<h1>Loading posts...</h1>) : ( data.getPosts && data.getPosts.map(post => (
                     <GridColumn key={post.id} style={ {marginBottom: 20}}>
                         <PostCard post = {post}/>
                     </GridColumn>
                 )))}
             </GridRow>  
         </Grid>
-       
-    )
+    ) : (
+        (<h1>Loading posts...</h1>)
+    );
+
+    return content;
 }
 
 const FETCH_POSTS_QUERY = gql`
