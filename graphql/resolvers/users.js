@@ -1,4 +1,4 @@
-const User = require('../../models/User');
+ const User = require('../../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { UserInputError } = require('apollo-server');
@@ -62,12 +62,14 @@ module.exports = {
         }, 
         async login(_, { username, password }){
             const {errors, valid} = validateLoginInput(username, password);
-            const user = await User.findOne({ username });
 
             if (!valid) {
                 errors.general = 'Wrong credentials';
                 throw new UserInputError('Errors', errors);
             }
+
+            const user = await User.findOne({ username });
+
 
             if (!user) {
                 errors.general = 'User not found';
