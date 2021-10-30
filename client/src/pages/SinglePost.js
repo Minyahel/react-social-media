@@ -1,11 +1,12 @@
 import React, {useContext} from "react";
 import gql from "graphql-tag";
 import { useQuery } from '@apollo/react-hooks';
-import { Button, Card, CardContent, Grid, GridRow, Label } from "semantic-ui-react";
+import { Button, Card, CardContent, Grid, Label, Image, Icon } from "semantic-ui-react";
 import moment from "moment";
 import LikeButton from "../components/LikeButton";
 
 import { AuthContext } from "../context/auth";
+import DeleteButton from "../components/DeleteButton";
 
 
 function SinglePost(props) {
@@ -13,18 +14,22 @@ function SinglePost(props) {
 
     const { user } = useContext(AuthContext);
 
-    const { data = { getPost }} = useQuery(FETCH_POST_QUERY, {
+    const { data } = useQuery(FETCH_POST_QUERY, {
         variables: {
             postId
         }
     })
+
+    function deletePostCallback() {
+        props.history.push('/');
+    }
 
     let postMarkup;
 
     if (!data) {
         postMarkup = <p>Loading post...</p>
     } else {
-        const {id, body, createdAt, username, comments, likes, likeCount, commentCount} = data;
+        const {id, body, createdAt, username, comments, likes, likeCount, commentCount} = data.getPost;
 
         postMarkup = (
             <Grid>
@@ -41,6 +46,7 @@ function SinglePost(props) {
                     <Card.Content>
                         <Card.Header>{username}</Card.Header>
                         <Card.Meta>{moment(createdAt).fromNow()}</Card.Meta>
+                        <Card.Description>{body}</Card.Description>
                     </Card.Content>
                     <hr/>
                     <CardContent extra>
@@ -53,6 +59,9 @@ function SinglePost(props) {
                                 {commentCount}
                             </Label>
                         </Button>
+                        {user && user.username === username && (
+                            <DeleteButton postId={id} callback={deletePostCallback}/>
+                        )}
                     </CardContent>
                 </Card>
                 </Grid.Column>
@@ -61,13 +70,11 @@ function SinglePost(props) {
         )
     }
 
-    return (
-
-    )
+    return postMarkup;
 }
 
 const FETCH_POST_QUERY = gql `
-    query ($postId: ID!) {
+    query($postId: ID!) {
             getPost(postId: $postId) {
             id
             body 
@@ -86,6 +93,6 @@ const FETCH_POST_QUERY = gql `
             }
         }
     }
-`
+`;
 
 export default SinglePost;
