@@ -62,7 +62,6 @@ function MenuBar() {
  
     return MenuBar;
       
-   
   }
 
 
